@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include "utils/utils.h"
 #include <pthread.h>
+#include <unistd.h>
 #define TAKE_FORK "has taken a fork"
 #define EAT "is eating"
 #define SLEEP "is sleeping"
@@ -19,7 +20,7 @@ typedef struct s_data
 	unsigned int	eat_time;
 	unsigned int	sleep_time;
 	int 			meals_n;
-	int 			dead_i;
+	int 			death_i;
 	pthread_t 		*pthreads;
 	pthread_mutex_t **forks;
 	pthread_mutex_t *dead_m;
@@ -30,6 +31,7 @@ typedef struct s_philo
 {
 	int				index;
 	size_t			last_meal;
+	size_t			start;
 	pthread_mutex_t *fork_one;
 	pthread_mutex_t *fork_two;
 	t_data 			*data;
@@ -48,4 +50,6 @@ t_philo	*init_philos(t_data *data);
 void	init_data(t_data *data, char *argv[]);
 
 void	exec(t_data *data, t_philo *philos);
+
+void	print_status(t_philo *philo, char *status, t_data *data);
 #endif

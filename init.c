@@ -21,7 +21,7 @@ void	init_data(t_data *data, char *argv[])
 		data->meals_n = ft_atoi(argv[5]);
 	if (check_data(data, argv))
 		exit(1);
-	data->dead_i = -1;
+	data->death_i = -1;
 	create_mutexes(data);
 	create_pthreads_arr(data);
 }
@@ -39,6 +39,7 @@ t_philo *init_philos(t_data *data)
 	{
 		philos[i].fork_one = data->forks[i];
 		philos[i].fork_two = data->forks[(i + 1) % data->num];
+		philos[i].data = data;
 		i++;
 	}
 	return (philos);
