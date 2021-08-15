@@ -20,7 +20,7 @@ typedef struct s_data
 	unsigned int	sleep_time;
 	int 			meals_n;
 	int 			dead_i;
-	pthread_t 		*phreads;
+	pthread_t 		*pthreads;
 	pthread_mutex_t **forks;
 	pthread_mutex_t *dead_m;
 	pthread_mutex_t *print_m;
@@ -28,12 +28,22 @@ typedef struct s_data
 
 typedef struct s_philo
 {
-
+	int				index;
+	size_t			last_meal;
+	pthread_mutex_t *fork_one;
+	pthread_mutex_t *fork_two;
+	t_data 			*data;
 }				t_philo;
 
 size_t	getTime();
 
 void	check_args(int argc);
 
-void	check_args(int argc);
+int		create_mutexes(t_data *data);
+
+int		create_pthreads_arr(t_data *data);
+
+t_philo	*init_philos(t_data *data);
+
+void	init_data(t_data *data, char *argv[]);
 #endif
