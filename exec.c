@@ -1,7 +1,5 @@
 #include "philo.h"
 
-
-
 void	resting(unsigned int time)
 {
 	unsigned long	start;
@@ -9,7 +7,6 @@ void	resting(unsigned int time)
 	start = getTime();
 	while (getTime() - start < (unsigned long)time)
 		usleep(100);
-
 }
 
 void *philo_routine(void *philo)
@@ -21,8 +18,6 @@ void *philo_routine(void *philo)
 	data = phil->data;
 	phil->start = getTime();
 	phil->last_meal = 0;
-	printf("start = %lu\n", phil->start);
-	printf("last_meal = %lu\n", phil->last_meal);
 	while(1)
 	{
 		if (data->death_i != -1)
@@ -62,10 +57,6 @@ void	*death_eye(void *phil)
 		i = 0;
 		while (i < data->num)
 		{
-//			t = getTime() - philos[i].start;
-//			printf("here\n");
-//			printf("index = %d\n", philos[i].index);
-
 			if (getTime() - philos->start - philos[i].last_meal > (size_t) data->die_time)
 			{
 				pthread_mutex_lock(data->dead_m);
