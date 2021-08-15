@@ -1,4 +1,4 @@
-#include "../philo.h"
+#include <libc.h>
 #include <sys/time.h>
 
 size_t getTime()
