@@ -48,6 +48,7 @@ t_philo *init_philos(t_data *data)
 		return (NULL);
 	while (i < data->num)
 	{
+		philos[i].index = i;
 		if ((i + 1) % 2)
 		{
 			philos[i].fork_one = get_first(i, data);
@@ -56,11 +57,10 @@ t_philo *init_philos(t_data *data)
 		else
 		{
 			philos[i].fork_one = data->forks[i - 1];
-			philos->fork_two = data->forks[i];
+			philos[i]. fork_two = data->forks[i];
 		}
 		philos[i].data = data;
 		i++;
 	}
-
 	return (philos);
 }

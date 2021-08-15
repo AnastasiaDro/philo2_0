@@ -8,11 +8,8 @@ void *philo_routine(void *philo)
 
 	phil = (t_philo *) philo;
 	data = phil->data;
-	phil->last_meal = getTime();
-	phil->start = phil->last_meal;
-	pthread_mutex_lock(data->dead_m);
-
-	pthread_mutex_unlock(data->dead_m);
+	phil->start = getTime();
+	phil->last_meal = getTime() - phil->start;
 	while(1)
 	{
 		if (data->death_i != -1)
@@ -48,14 +45,17 @@ void	*death_eye(void *phil)
 		while (i < data->num)
 		{
 			t = getTime() - philos[i].start;
-//			printf("here\n");
-//			printf("index = %d\n", philos[i].index);
-//			printf("t = %lu\nlast.meal = %lu\n", t, philos[i].last_meal);
-//			printf("diff = %lu\n", t - philos[i].last_meal);
-			if (getTime() - philos->start - philos[i].last_meal > (size_t) data->die_time)
+			printf("here\n");
+			printf("index = %d\n", philos[i].index);
+			printf("t = %lu\nlast.meal = %lu\n", t, philos[i].last_meal);
+			printf("diff = %lu\n", t - philos[i].last_meal);
+			if (t - philos[i].last_meal > (size_t) data->die_time)
 			{
-				pthread_mutex_lock(data->dead_m);
+				printf("here\n");
+				printf("philos[i].last_meal = %lu", philos[i].last_meal);
+			//	pthread_mutex_lock(data->dead_m);
 				data->death_i = i;
+			//	pthread_mutex_unlock(data->dead_m);
 				print_status(&philos[i], DIED, data);
 				break;
 			}
@@ -71,16 +71,19 @@ int	start_threads(t_philo *philos, t_data *data)
 	pthread_t death_checker;
 
 	i = 0;
-	pthread_create(&death_checker, NULL, &death_eye, philos);
+
 	while (i < data->num)
 	{
+		printf("index to create = %d\n", i + 1);
 		if (pthread_create(&data->pthreads[i], NULL, &philo_routine, &philos[i]) != 0) {
 			perror("Failed to create thread\n");
 			return (i);
 		}
+		printf("created i = %d\n", i + 1);
 		usleep(100);
 		i++;
 	}
+	//pthread_create(&death_checker, NULL, &death_eye, philos);
 	return (0);
 }
 
@@ -89,4 +92,5 @@ void	exec(t_data *data, t_philo *philos)
 {
 	start_threads(philos, data);
 	destroy_mutexes(data);
+
 }
