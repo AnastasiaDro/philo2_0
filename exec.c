@@ -1,6 +1,17 @@
 #include "philo.h"
 
 
+
+void	resting(unsigned int time)
+{
+	unsigned long	start;
+
+	start = getTime();
+	while (getTime() - start < (unsigned long)time)
+		usleep(100);
+
+}
+
 void *philo_routine(void *philo)
 {
 	t_philo *phil;
@@ -9,22 +20,29 @@ void *philo_routine(void *philo)
 	phil = (t_philo *) philo;
 	data = phil->data;
 	phil->start = getTime();
-	phil->last_meal = getTime() - phil->start;
+	phil->last_meal = 0;
+	printf("start = %lu\n", phil->start);
+	printf("last_meal = %lu\n", phil->last_meal);
 	while(1)
 	{
 		if (data->death_i != -1)
+		{
+			print_status(phil, DIED, data);
 			return (NULL);
+		}
+
+
 		pthread_mutex_lock(phil->fork_one);
 		print_status(phil, TAKE_FORK, data);
 		pthread_mutex_lock(phil->fork_two);
 		print_status(phil, TAKE_FORK, data);
 		print_status(phil, EAT, data);
 		phil->last_meal = getTime() - phil->start;
-		usleep(data->eat_time * 1000);
+		resting(data->eat_time);
 		pthread_mutex_unlock(phil->fork_one);
 		pthread_mutex_unlock(phil->fork_two);
 		print_status(phil, SLEEP, data);
-		usleep(data->sleep_time * 1000);
+		resting(data->sleep_time);
 		print_status(phil, THINK, data);
 	}
 	return (NULL);
@@ -44,18 +62,15 @@ void	*death_eye(void *phil)
 		i = 0;
 		while (i < data->num)
 		{
-			t = getTime() - philos[i].start;
-			printf("here\n");
-			printf("index = %d\n", philos[i].index);
-			printf("t = %lu\nlast.meal = %lu\n", t, philos[i].last_meal);
-			printf("diff = %lu\n", t - philos[i].last_meal);
-			if (t - philos[i].last_meal > (size_t) data->die_time)
+//			t = getTime() - philos[i].start;
+//			printf("here\n");
+//			printf("index = %d\n", philos[i].index);
+
+			if (getTime() - philos->start - philos[i].last_meal > (size_t) data->die_time)
 			{
-				printf("here\n");
-				printf("philos[i].last_meal = %lu", philos[i].last_meal);
-			//	pthread_mutex_lock(data->dead_m);
+				pthread_mutex_lock(data->dead_m);
 				data->death_i = i;
-			//	pthread_mutex_unlock(data->dead_m);
+				pthread_mutex_unlock(data->dead_m);
 				print_status(&philos[i], DIED, data);
 				break;
 			}
@@ -74,16 +89,15 @@ int	start_threads(t_philo *philos, t_data *data)
 
 	while (i < data->num)
 	{
-		printf("index to create = %d\n", i + 1);
 		if (pthread_create(&data->pthreads[i], NULL, &philo_routine, &philos[i]) != 0) {
 			perror("Failed to create thread\n");
 			return (i);
 		}
-		printf("created i = %d\n", i + 1);
 		usleep(100);
 		i++;
 	}
-	//pthread_create(&death_checker, NULL, &death_eye, philos);
+	pthread_create(&death_checker, NULL, &death_eye, philos);
+	pthread_join(death_checker, NULL);
 	return (0);
 }
 
@@ -91,6 +105,5 @@ int	start_threads(t_philo *philos, t_data *data)
 void	exec(t_data *data, t_philo *philos)
 {
 	start_threads(philos, data);
-	destroy_mutexes(data);
-
+	printf("here\n");
 }

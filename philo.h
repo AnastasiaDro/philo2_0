@@ -56,4 +56,7 @@ void	exec(t_data *data, t_philo *philos);
 void	print_status(t_philo *philo, char *status, t_data *data);
 
 void destroy_mutexes(t_data *data);
+
+//void	resting(unsigned int time);
+void	resting(unsigned int time);
 #endif
