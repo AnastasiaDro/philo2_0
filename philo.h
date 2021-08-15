@@ -46,4 +46,6 @@ int		create_pthreads_arr(t_data *data);
 t_philo	*init_philos(t_data *data);
 
 void	init_data(t_data *data, char *argv[]);
+
+void	exec(t_data *data, t_philo *philos);
 #endif

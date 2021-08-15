@@ -7,7 +7,8 @@ int	main(int argc, char *argv[])
 	t_philo	*philos;
 
 	check_args(argc);
-	init_data(&data);
+	init_data(&data, argv);
 	philos = init_philos(&data);
+	exec(&data, philos);
 	return 0;
 }
