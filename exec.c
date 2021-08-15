@@ -25,8 +25,6 @@ void *philo_routine(void *philo)
 			print_status(phil, DIED, data);
 			return (NULL);
 		}
-
-
 		pthread_mutex_lock(phil->fork_one);
 		print_status(phil, TAKE_FORK, data);
 		pthread_mutex_lock(phil->fork_two);
@@ -36,6 +34,7 @@ void *philo_routine(void *philo)
 		resting(data->eat_time);
 		pthread_mutex_unlock(phil->fork_one);
 		pthread_mutex_unlock(phil->fork_two);
+		phil->meals_amount++;
 		print_status(phil, SLEEP, data);
 		resting(data->sleep_time);
 		print_status(phil, THINK, data);
@@ -46,16 +45,15 @@ void *philo_routine(void *philo)
 void	*death_eye(void *phil)
 {
 	int		i;
-	size_t	t;
 	t_data	*data;
 	t_philo *philos;
 
 	philos = (t_philo *) phil;
 	data = philos->data;
-	while(data->death_i == -1)
+	while (data->death_i == -1)
 	{
-		i = 0;
-		while (i < data->num)
+		i = -1;
+		while (++i < data->num)
 		{
 			if (getTime() - philos->start - philos[i].last_meal > (size_t) data->die_time)
 			{
@@ -65,7 +63,12 @@ void	*death_eye(void *phil)
 				print_status(&philos[i], DIED, data);
 				break;
 			}
-			i++;
+			if (data->is_food_limited && philos->meals_amount == data->meals_n)
+			{
+				data->is_ready++;
+				if (data->is_ready == data->num)
+					break;
+			}
 		}
 	}
 	return (NULL);
@@ -73,11 +76,10 @@ void	*death_eye(void *phil)
 
 int	start_threads(t_philo *philos, t_data *data)
 {
-	int i;
-	pthread_t death_checker;
+	int			i;
+	pthread_t	death_checker;
 
 	i = 0;
-
 	while (i < data->num)
 	{
 		if (pthread_create(&data->pthreads[i], NULL, &philo_routine, &philos[i]) != 0) {

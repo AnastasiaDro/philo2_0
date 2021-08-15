@@ -19,14 +19,15 @@ typedef struct s_data
 	unsigned int	die_time;
 	unsigned int	eat_time;
 	unsigned int	sleep_time;
-	int 			meals_n;
+	unsigned int 	meals_n;
 	int 			death_i;
 	pthread_t 		*pthreads;
 	pthread_mutex_t **forks;
 	pthread_mutex_t *dead_m;
 	pthread_mutex_t *print_m;
 	pthread_mutex_t *start_m;
-	pthread_mutex_t *get_meal_m;
+	int 			is_food_limited;
+	int 			is_ready;
 }				t_data;
 
 typedef struct s_philo
@@ -37,6 +38,7 @@ typedef struct s_philo
 	pthread_mutex_t *fork_one;
 	pthread_mutex_t *fork_two;
 	t_data 			*data;
+	unsigned int 	meals_amount;
 }				t_philo;
 
 size_t	getTime();

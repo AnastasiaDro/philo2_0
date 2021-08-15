@@ -18,7 +18,13 @@ void	init_data(t_data *data, char *argv[])
 	data->eat_time = ft_atoi(argv[3]);
 	data->sleep_time = ft_atoi(argv[4]);
 	if (argv[5])
+	{
 		data->meals_n = ft_atoi(argv[5]);
+		data->is_food_limited = 1;
+		data->is_ready = 0;
+	}
+	else
+		data->is_food_limited = 0;
 	if (check_data(data, argv))
 		exit(1);
 	data->death_i = -1;
@@ -60,6 +66,7 @@ t_philo *init_philos(t_data *data)
 			philos[i]. fork_two = data->forks[i];
 		}
 		philos[i].data = data;
+		philos[i].meals_amount = 0;
 		i++;
 	}
 	return (philos);
