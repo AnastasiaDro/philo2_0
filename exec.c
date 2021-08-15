@@ -61,13 +61,18 @@ void	*death_eye(void *phil)
 				data->death_i = i;
 				pthread_mutex_unlock(data->dead_m);
 				print_status(&philos[i], DIED, data);
-				break;
+				return (NULL);
 			}
-			if (data->is_food_limited && philos->meals_amount == data->meals_n)
+			if (philos[i].meals_amount == data->meals_n)
 			{
 				data->is_ready++;
 				if (data->is_ready == data->num)
-					break;
+				{
+					pthread_mutex_lock(data->dead_m);
+					data->death_i = i;
+					pthread_mutex_unlock(data->dead_m);
+					return (NULL);
+				}
 			}
 		}
 	}

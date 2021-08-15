@@ -15,7 +15,7 @@
 
 void	check_args(int argc)
 {
-	if (argc < 4 || argc > 5)
+	if (argc < 4 || argc > 6)
 	{
 		printf("Invalid arguments number!\n");
 		exit(1);
