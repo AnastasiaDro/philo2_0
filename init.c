@@ -58,7 +58,9 @@ t_philo *init_philos(t_data *data)
 			philos[i].fork_one = data->forks[i - 1];
 			philos->fork_two = data->forks[i];
 		}
+		philos[i].data = data;
 		i++;
 	}
+
 	return (philos);
 }
