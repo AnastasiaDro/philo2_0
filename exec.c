@@ -8,26 +8,27 @@ void *philo_routine(void *philo)
 
 	phil = (t_philo *) philo;
 	data = phil->data;
-	phil->start = getTime();
-	phil->last_meal = phil->start;
+	phil->last_meal = getTime();
+	phil->start = phil->last_meal;
 	pthread_mutex_lock(data->dead_m);
-	if (data->death_i != -1)
-		return (NULL);
+
 	pthread_mutex_unlock(data->dead_m);
 	while(1)
 	{
+		if (data->death_i != -1)
+			return (NULL);
 		pthread_mutex_lock(phil->fork_one);
 		print_status(phil, TAKE_FORK, data);
 		pthread_mutex_lock(phil->fork_two);
 		print_status(phil, TAKE_FORK, data);
-		print_status(phil->index + 1, EAT, data);
+		print_status(phil, EAT, data);
 		phil->last_meal = getTime() - phil->start;
 		usleep(data->eat_time * 1000);
 		pthread_mutex_unlock(phil->fork_one);
 		pthread_mutex_unlock(phil->fork_two);
-		print_status(phil->index + 1, SLEEP, data);
+		print_status(phil, SLEEP, data);
 		usleep(data->sleep_time * 1000);
-		print_status(phil->index + 1, THINK, data);
+		print_status(phil, THINK, data);
 	}
 	return (NULL);
 }
@@ -87,5 +88,5 @@ int	start_threads(t_philo *philos, t_data *data)
 void	exec(t_data *data, t_philo *philos)
 {
 	start_threads(philos, data);
-
+	destroy_mutexes(data);
 }

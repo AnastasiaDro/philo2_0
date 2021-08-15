@@ -26,6 +26,17 @@ void	init_data(t_data *data, char *argv[])
 	create_pthreads_arr(data);
 }
 
+pthread_mutex_t *get_first(int i, t_data *data)
+{
+	pthread_mutex_t *first_fork;
+
+	if (i == 0)
+		first_fork = data->forks[data->num - 1];
+	else
+		first_fork = data->forks[i - 1];
+	return (first_fork);
+}
+
 t_philo *init_philos(t_data *data)
 {
 	int		i;
@@ -37,9 +48,16 @@ t_philo *init_philos(t_data *data)
 		return (NULL);
 	while (i < data->num)
 	{
-		philos[i].fork_one = data->forks[i];
-		philos[i].fork_two = data->forks[(i + 1) % data->num];
-		philos[i].data = data;
+		if ((i + 1) % 2)
+		{
+			philos[i].fork_one = get_first(i, data);
+			philos[i]. fork_two = data->forks[i];
+		}
+		else
+		{
+			philos[i].fork_one = data->forks[i - 1];
+			philos->fork_two = data->forks[i];
+		}
 		i++;
 	}
 	return (philos);
