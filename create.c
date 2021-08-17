@@ -12,8 +12,6 @@ int	create_mutexes(t_data *data)
 	pthread_mutex_init(data->print_m, NULL);
 	data->start_m = malloc(sizeof (pthread_mutex_t));
 	pthread_mutex_init(data->start_m, NULL);
-	data->prnt_dth_m = malloc(sizeof (pthread_mutex_t));
-	pthread_mutex_init(data->prnt_dth_m, NULL);
 	data->forks = malloc(sizeof (pthread_mutex_t *) * data ->num);
 	while (i < data->num)
 	{
