@@ -25,19 +25,13 @@ void	*philo_routine(void *philo)
 	phil = (t_philo *) philo;
 	data = phil->data;
 	phil->start = getTime();
-	phil->last_meal = 0;
+	phil->last_meal = phil->start;
 	while (1)
 	{
 		if (data->death_i != -1 )
 		{
 			if (!data->is_food_limited && data->death_i == phil->index)
-			{
-				// pthread_mutex_lock(data->prnt_dth_m);
-				// print_status(phil, DIED, data);
-				// data->printed_death = 1;
-				// pthread_mutex_unlock(data->prnt_dth_m);
 				say_dead(data, phil);
-			}
 			return (NULL);
 		}
 		pthread_mutex_lock(phil->fork_one);
@@ -52,7 +46,8 @@ void	*philo_routine(void *philo)
 		phil->meals_amount++;
 		print_status(phil, SLEEP, data);
 		resting(data->sleep_time);
-		print_status(phil, THINK, data);
+		if (data->death_i == -1)
+			print_status(phil, THINK, data);
 	}
 	return (NULL);
 }
@@ -76,7 +71,7 @@ void	*death_eye(void *phil)
 				data->death_i = i;
 				pthread_mutex_unlock(data->dead_m);
 				if (data->num == 1)
-					print_status(&philos[i], DIED, data);
+					print_status(&philos[0], DIED, data);
 				return (NULL);
 			}
 			if (philos[i].meals_amount == data->meals_n)
@@ -101,6 +96,7 @@ int	start_threads(t_philo *philos, t_data *data)
 	pthread_t	death_checker;
 
 	i = 0;
+
 	while (i < data->num)
 	{
 		if (pthread_create(&data->pthreads[i], NULL, &philo_routine, &philos[i]) != 0) {
@@ -114,7 +110,6 @@ int	start_threads(t_philo *philos, t_data *data)
 	pthread_join(death_checker, NULL);
 	return (0);
 }
-
 
 void	exec(t_data *data, t_philo *philos)
 {
@@ -135,5 +130,4 @@ void	exec(t_data *data, t_philo *philos)
 		}
 	}
 	destroy_mutexes(data);
-
 }
