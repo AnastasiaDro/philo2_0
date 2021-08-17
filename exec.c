@@ -20,9 +20,10 @@ void *philo_routine(void *philo)
 	phil->last_meal = 0;
 	while(1)
 	{
-		if (data->death_i != -1)
+		if (data->death_i != -1 )
 		{
-			print_status(phil, DIED, data);
+			if(!data->is_food_limited)
+				print_status(phil, DIED, data);
 			return (NULL);
 		}
 		pthread_mutex_lock(phil->fork_one);
@@ -60,7 +61,7 @@ void	*death_eye(void *phil)
 				pthread_mutex_lock(data->dead_m);
 				data->death_i = i;
 				pthread_mutex_unlock(data->dead_m);
-				print_status(&philos[i], DIED, data);
+				//print_status(&philos[i], DIED, data);
 				return (NULL);
 			}
 			if (philos[i].meals_amount == data->meals_n)
@@ -102,6 +103,15 @@ int	start_threads(t_philo *philos, t_data *data)
 
 void	exec(t_data *data, t_philo *philos)
 {
+	int i;
+
+	i = 0;
 	start_threads(philos, data);
-	printf("here\n");
+	while(i < data->num)
+	{
+		pthread_join(data->pthreads[i], NULL);
+		i++;
+	}
+	destroy_mutexes(data);
+
 }
