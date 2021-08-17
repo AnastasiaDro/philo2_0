@@ -17,6 +17,7 @@ void	init_data(t_data *data, char *argv[])
 	data->die_time = ft_atoi(argv[2]);
 	data->eat_time = ft_atoi(argv[3]);
 	data->sleep_time = ft_atoi(argv[4]);
+	data->printed_death = 0;
 	if (argv[5])
 	{
 		data->meals_n = ft_atoi(argv[5]);

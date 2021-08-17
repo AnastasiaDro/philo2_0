@@ -26,8 +26,10 @@ typedef struct s_data
 	pthread_mutex_t *dead_m;
 	pthread_mutex_t *print_m;
 	pthread_mutex_t *start_m;
+	pthread_mutex_t	*prnt_dth_m;
 	int 			is_food_limited;
 	int 			is_ready;
+	int 			printed_death;
 }				t_data;
 
 typedef struct s_philo
