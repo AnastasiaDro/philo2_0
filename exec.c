@@ -107,10 +107,17 @@ void	exec(t_data *data, t_philo *philos)
 
 	i = 0;
 	start_threads(philos, data);
-	while(i < data->num)
+	if (data->num == 1)
 	{
-		pthread_join(data->pthreads[i], NULL);
-		i++;
+		pthread_detach(data->pthreads[i]);
+	}
+	else
+	{
+		while(i < data->num)
+		{
+			pthread_join(data->pthreads[i], NULL);
+			i++;
+		}
 	}
 	destroy_mutexes(data);
 
