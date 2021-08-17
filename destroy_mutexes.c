@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   destroy_mutexes.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/17 18:14:23 by cerebus           #+#    #+#             */
+/*   Updated: 2021/08/17 18:14:45 by cerebus          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-void destroy_mutexes(t_data *data)
+void	destroy_mutexes(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	pthread_mutex_destroy(data->print_m);

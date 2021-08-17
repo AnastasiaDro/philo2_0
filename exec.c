@@ -9,25 +9,34 @@ void	resting(unsigned int time)
 		usleep(100);
 }
 
-void *philo_routine(void *philo)
+void	say_dead(t_data *data, t_philo *phil)
 {
-	t_philo *phil;
-	t_data 	*data;
+	pthread_mutex_lock(data->prnt_dth_m);
+	print_status(phil, DIED, data);
+	data->printed_death = 1;
+	pthread_mutex_unlock(data->prnt_dth_m);
+}
+
+void	*philo_routine(void *philo)
+{
+	t_philo	*phil;
+	t_data	*data;
 
 	phil = (t_philo *) philo;
 	data = phil->data;
 	phil->start = getTime();
 	phil->last_meal = 0;
-	while(1)
+	while (1)
 	{
 		if (data->death_i != -1 )
 		{
 			if (!data->is_food_limited && data->death_i == phil->index)
 			{
-				pthread_mutex_lock(data->prnt_dth_m);
-				print_status(phil, DIED, data);
-				data->printed_death = 1;
-				pthread_mutex_unlock(data->prnt_dth_m);
+				// pthread_mutex_lock(data->prnt_dth_m);
+				// print_status(phil, DIED, data);
+				// data->printed_death = 1;
+				// pthread_mutex_unlock(data->prnt_dth_m);
+				say_dead(data, phil);
 			}
 			return (NULL);
 		}
