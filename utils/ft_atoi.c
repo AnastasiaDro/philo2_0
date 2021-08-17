@@ -34,6 +34,7 @@ long	ft_atoi(char *str)
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
+		return (-1);
 		coef = calc_coef(str[i]);
 		i++;
 	}

@@ -15,11 +15,11 @@
 
 typedef struct s_data
 {
-	unsigned int	num;
-	unsigned int	die_time;
-	unsigned int	eat_time;
-	unsigned int	sleep_time;
-	unsigned int 	meals_n;
+	long int	num;
+	long int	die_time;
+	long int	eat_time;
+	long int	sleep_time;
+	long int 	meals_n;
 	int 			death_i;
 	pthread_t 		*pthreads;
 	pthread_mutex_t **forks;

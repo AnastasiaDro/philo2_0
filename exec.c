@@ -23,12 +23,7 @@ void *philo_routine(void *philo)
 		if (data->death_i != -1 )
 		{
 			if (!data->is_food_limited && data->death_i == phil->index)
-			{
-				pthread_mutex_lock(data->prnt_dth_m);
 				print_status(phil, DIED, data);
-				data->printed_death = 1;
-				pthread_mutex_unlock(data->prnt_dth_m);
-			}
 			return (NULL);
 		}
 		pthread_mutex_lock(phil->fork_one);
@@ -43,7 +38,8 @@ void *philo_routine(void *philo)
 		phil->meals_amount++;
 		print_status(phil, SLEEP, data);
 		resting(data->sleep_time);
-		print_status(phil, THINK, data);
+		if (data->death_i == -1)
+			print_status(phil, THINK, data);
 	}
 	return (NULL);
 }
