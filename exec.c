@@ -21,23 +21,21 @@ void *philo_routine(void *philo)
 	while(1)
 	{
 		if (data->death_i != -1 )
-		{
-//			if (!data->is_food_limited && data->death_i == phil->index)
-//				print_status(phil, DIED, data);
 			return (NULL);
-		}
 		pthread_mutex_lock(phil->fork_one);
 		print_status(phil, TAKE_FORK, data);
 		pthread_mutex_lock(phil->fork_two);
 		print_status(phil, TAKE_FORK, data);
+		if (data->death_i != -1)
+			return (NULL);
 		print_status(phil, EAT, data);
 		phil->last_meal = getTime() - phil->start;
 		resting(data->eat_time);
+		if (data->death_i != -1)
+			return (NULL);
 		pthread_mutex_unlock(phil->fork_one);
 		pthread_mutex_unlock(phil->fork_two);
 		phil->meals_amount++;
-		if (data->death_i != -1)
-			return (NULL);
 		print_status(phil, SLEEP, data);
 		resting(data->sleep_time);
 		if (data->death_i != -1)
@@ -125,5 +123,4 @@ void	exec(t_data *data, t_philo *philos)
 		}
 	}
 	destroy_mutexes(data);
-
 }
