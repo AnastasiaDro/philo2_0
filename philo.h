@@ -55,13 +55,15 @@ t_philo	*init_philos(t_data *data);
 
 void	init_data(t_data *data, char *argv[]);
 
-void	exec(t_data *data, t_philo *philos);
+int		start_threads(t_data *data, t_philo *philos);
 
 void	print_status(t_philo *philo, char *status, t_data *data);
 
 void destroy_mutexes(t_data *data);
 
 void	resting(unsigned int time);
+
+void	*philo_routine(void *philo);
 
 void 	free_all(t_data *data, t_philo *philos);
 #endif

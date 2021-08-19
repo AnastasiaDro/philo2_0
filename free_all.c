@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/19 15:42:39 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/19 15:42:41 by cerebus          ###   ########.fr       */
+/*   Created: 2021/08/19 15:42:52 by cerebus           #+#    #+#             */
+/*   Updated: 2021/08/19 15:43:03 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char *argv[])
+void	free_data(t_data *data)
 {
-	t_data	data;
-	t_philo	*philos;
+	unsigned int	i;
 
-	check_args(argc);
-	init_data(&data, argv);
-	philos = init_philos(&data);
-	start_threads(&data, philos);
-	free_all(&data, philos);
-	return (0);
+	i = 0;
+	free(data->dead_m);
+	free(data->print_m);
+	while (i < data->num)
+	{
+		free(data->forks[i]);
+		i++;
+	}
+	free(data->forks);
+	free(data->pthreads);
+}
+
+void	free_all(t_data *data, t_philo *philos)
+{
+	destroy_mutexes(data);
+	free_data(data);
+	free(philos);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/19 15:43:19 by cerebus           #+#    #+#             */
+/*   Updated: 2021/08/19 16:17:27 by cerebus          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 void	resting(unsigned int time)
@@ -9,81 +21,53 @@ void	resting(unsigned int time)
 		usleep(100);
 }
 
-void *philo_routine(void *philo)
+int	are_philos_full(t_philo *philo, t_data *data)
 {
-	t_philo *phil;
-	t_data 	*data;
-
-	phil = (t_philo *) philo;
-	data = phil->data;
-	phil->start = getTime();
-	phil->last_meal = 0;
-	while(1)
+	if (philo->meals_amount == data->meals_n && !philo->end_meals)
 	{
-		if (data->death_i != -1 )
-			return (NULL);
-		pthread_mutex_lock(phil->fork_one);
-		print_status(phil, TAKE_FORK, data);
-		pthread_mutex_lock(phil->fork_two);
-		print_status(phil, TAKE_FORK, data);
-		if (data->death_i != -1)
-			return (NULL);
-		print_status(phil, EAT, data);
-		phil->last_meal = getTime() - phil->start;
-		resting(data->eat_time);
-		if (data->death_i != -1)
-			return (NULL);
-		phil->meals_amount++;
-		pthread_mutex_unlock(phil->fork_one);
-		pthread_mutex_unlock(phil->fork_two);
-		print_status(phil, SLEEP, data);
-		resting(data->sleep_time);
-		if (data->death_i != -1)
-			return (NULL);
-		print_status(phil, THINK, data);
+		data->is_ready++;
+		philo->end_meals = 1;
+		if (data->is_ready == data->num)
+		{
+			pthread_mutex_lock(data->dead_m);
+			data->death_i = philo->index;
+			pthread_mutex_unlock(data->dead_m);
+			return (1);
+		}
 	}
-	return (NULL);
+	return (0);
 }
 
-void	*death_eye(void *phil)
+void	*death_eye(void *philo)
 {
 	int		i;
 	t_data	*data;
-	t_philo *philos;
+	t_philo	*phil;
 
-	philos = (t_philo *) phil;
-	data = philos->data;
+	phil = (t_philo *) philo;
+	data = phil->data;
 	while (data->death_i == -1)
 	{
 		i = -1;
 		while (++i < data->num)
 		{
-			if (getTime() - philos->start - philos[i].last_meal > (size_t) data->die_time)
+			if (getTime() - phil->start - phil[i].last_meal \
+					 > (size_t) data->die_time)
 			{
 				pthread_mutex_lock(data->dead_m);
 				data->death_i = i;
 				pthread_mutex_unlock(data->dead_m);
-				print_status(&philos[i], DIED, data);
+				print_status(&phil[i], DIED, data);
 				return (NULL);
 			}
-			if (philos[i].meals_amount == data->meals_n && !philos[i].end_meals)
-			{
-				data->is_ready++;
-				philos[i].end_meals = 1;
-				if (data->is_ready == data->num)
-				{
-					pthread_mutex_lock(data->dead_m);
-					data->death_i = i;
-					pthread_mutex_unlock(data->dead_m);
-					return (NULL);
-				}
-			}
+			if (are_philos_full(&phil[i], data))
+				return (NULL);
 		}
 	}
 	return (NULL);
 }
 
-int	start_threads(t_philo *philos, t_data *data)
+int	start_threads(t_data *data, t_philo *philos)
 {
 	int			i;
 	pthread_t	death_checker;
@@ -91,36 +75,17 @@ int	start_threads(t_philo *philos, t_data *data)
 	i = 0;
 	while (i < data->num)
 	{
-		if (pthread_create(&data->pthreads[i], NULL, &philo_routine, &philos[i]) != 0) {
+		if (pthread_create(&data->pthreads[i], NULL, \
+			&philo_routine, &philos[i]) != 0)
+		{
 			perror("Failed to create thread\n");
 			return (i);
 		}
+		pthread_detach(data->pthreads[i]);
 		usleep(100);
 		i++;
 	}
 	pthread_create(&death_checker, NULL, &death_eye, philos);
 	pthread_join(death_checker, NULL);
 	return (0);
-}
-
-
-void	exec(t_data *data, t_philo *philos)
-{
-	int i;
-
-	i = 0;
-	start_threads(philos, data);
-	if (data->num == 1)
-	{
-		pthread_detach(data->pthreads[i]);
-	}
-	else
-	{
-		while(i < data->num)
-		{
-			pthread_join(data->pthreads[i], NULL);
-			i++;
-		}
-	}
-	destroy_mutexes(data);
 }
