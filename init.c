@@ -67,6 +67,7 @@ t_philo *init_philos(t_data *data)
 		}
 		philos[i].data = data;
 		philos[i].meals_amount = 0;
+		philos[i].end_meals = 0;
 		i++;
 	}
 	return (philos);

@@ -22,8 +22,8 @@ void *philo_routine(void *philo)
 	{
 		if (data->death_i != -1 )
 		{
-			if (!data->is_food_limited && data->death_i == phil->index)
-				print_status(phil, DIED, data);
+//			if (!data->is_food_limited && data->death_i == phil->index)
+//				print_status(phil, DIED, data);
 			return (NULL);
 		}
 		pthread_mutex_lock(phil->fork_one);
@@ -36,10 +36,13 @@ void *philo_routine(void *philo)
 		pthread_mutex_unlock(phil->fork_one);
 		pthread_mutex_unlock(phil->fork_two);
 		phil->meals_amount++;
+		if (data->death_i != -1)
+			return (NULL);
 		print_status(phil, SLEEP, data);
 		resting(data->sleep_time);
-		if (data->death_i == -1)
-			print_status(phil, THINK, data);
+		if (data->death_i != -1)
+			return (NULL);
+		print_status(phil, THINK, data);
 	}
 	return (NULL);
 }
@@ -62,13 +65,13 @@ void	*death_eye(void *phil)
 				pthread_mutex_lock(data->dead_m);
 				data->death_i = i;
 				pthread_mutex_unlock(data->dead_m);
-				if (data->num == 1)
-					print_status(&philos[i], DIED, data);
+				print_status(&philos[i], DIED, data);
 				return (NULL);
 			}
-			if (philos[i].meals_amount == data->meals_n)
+			if (philos[i].meals_amount == data->meals_n && !philos[i].end_meals)
 			{
 				data->is_ready++;
+				philos[i].end_meals = 1;
 				if (data->is_ready == data->num)
 				{
 					pthread_mutex_lock(data->dead_m);

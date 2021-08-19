@@ -40,6 +40,7 @@ typedef struct s_philo
 	pthread_mutex_t *fork_two;
 	t_data 			*data;
 	unsigned int 	meals_amount;
+	int				end_meals;
 }				t_philo;
 
 size_t	getTime();
