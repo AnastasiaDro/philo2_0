@@ -33,9 +33,9 @@ void *philo_routine(void *philo)
 		resting(data->eat_time);
 		if (data->death_i != -1)
 			return (NULL);
+		phil->meals_amount++;
 		pthread_mutex_unlock(phil->fork_one);
 		pthread_mutex_unlock(phil->fork_two);
-		phil->meals_amount++;
 		print_status(phil, SLEEP, data);
 		resting(data->sleep_time);
 		if (data->death_i != -1)

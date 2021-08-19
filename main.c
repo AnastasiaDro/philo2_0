@@ -9,5 +9,6 @@ int	main(int argc, char *argv[])
 	init_data(&data, argv);
 	philos = init_philos(&data);
 	exec(&data, philos);
+	free_all(&data, philos);
 	return 0;
 }
