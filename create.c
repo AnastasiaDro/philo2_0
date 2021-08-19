@@ -1,5 +1,16 @@
-#include "philo.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/19 16:18:33 by cerebus           #+#    #+#             */
+/*   Updated: 2021/08/19 16:18:43 by cerebus          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "philo.h"
 
 int	create_mutexes(t_data *data)
 {
@@ -16,7 +27,7 @@ int	create_mutexes(t_data *data)
 	while (i < data->num)
 	{
 		data->forks[i] = malloc(sizeof(pthread_mutex_t));
-		if(data->forks[i])
+		if (data->forks[i])
 			pthread_mutex_init(data->forks[i], NULL);
 		else
 			return (-1);
@@ -34,5 +45,3 @@ int	create_pthreads_arr(t_data *data)
 		return (-1);
 	return (0);
 }
-
-
