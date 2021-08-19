@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/19 16:21:36 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/19 16:22:20 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/19 16:27:49 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,7 @@ void	*philo_routine(void *philo);
 void	free_all(t_data *data, t_philo *philos);
 
 int		ft_atoi(char *str);
+
+
 
 #endif
