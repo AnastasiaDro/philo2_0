@@ -1,35 +1,89 @@
 //
 // Created by Cesar Erebus on 8/19/21.
 //
+#include <sys/errno.h>
 #include "philo_bonus.h"
 
-void	*philo_routine(t_bdata *bdata, int i)
+
+//void	init_sem_inside(t_bphilo *phil, t_bdata *bdata)
+//{
+//	phil->sem = sem_open(SEMAPHORE, O_CREAT, 0644, bdata->num);
+//	phil->die_sem = sem_open(DIED, O_CREAT, 0644, 1);
+//	phil->eat_full_sem = sem_open(IS_FULL, O_CREAT, 0644, bdata->num);
+//}
+
+void	take_forks(t_bphilo *bphil, t_bdata *bdata)
 {
-	t_philo	phil;
+	sem_wait(bdata->sem);
+	b_print_status(bphil, TAKE_FORK, bdata);
+	sem_wait(bdata->sem);
+	b_print_status(bphil, TAKE_FORK, bdata);
+}
 
 
-	t_data	*data;
+void	give_forks(t_bdata *bdata)
+{
+	sem_post(bdata->sem);
+	sem_post(bdata->sem);
+}
 
-	phil = (t_philo *) philo;
-	data = phil->data;
-	phil->start = getTime();
-	phil->last_meal = 0;
+void	lets_eat(t_bphilo *bphil, t_bdata *bdata)
+{
+	b_print_status(bphil, EAT, bdata);
+	bphil->last_meal = getTime() - bphil->start;
+	resting(bdata->eat_time);
+}
+
+void	lets_sleep(t_bphilo *bphil, t_bdata *bdata)
+{
+	b_print_status(bphil, SLEEP, bdata);
+	resting(bdata->sleep_time);
+}
+
+int		check_death(t_bphilo *bphil, t_bdata *bdata)
+{
+	int is;
+
+	is = EEXIST;
+	if (sem_open("DIED", O_EXCL) == &is)
+		exit(0);
+	if (getTime() - bphil->start - bphil->last_meal \
+		> (size_t) bdata->die_time)
+	{
+		sem_open("DIED", O_CREAT, 0644, 1);
+		b_print_status(bphil, DIED, bdata);
+		exit(0);
+	}
+//	if (are_philos_full(&phil[i], data))
+//		return (NULL);
+	return (0);
+}
+
+void	be_alive(t_bdata *bdata, int i)
+{
+	t_bphilo	bphil;
+
+	bphil.start = getTime();
+	bphil.last_meal = 0;
+	bphil.index	= i;
+	bphil.end_meals = 0;
+	init_sem(bdata);
 	while (1)
 	{
-		if (data->death_i != -1)
-			return (NULL);
-		take_forks(phil, data);
-		if (data->death_i != -1)
-			return (NULL);
-		lets_eat(phil, data);
-		if (data->death_i != -1)
-			return (NULL);
-		phil->meals_amount++;
-		give_forks(phil);
-		lets_sleep(phil, data);
-		if (data->death_i != -1)
-			return (NULL);
-		print_status(phil, THINK, data);
+		check_death(&bphil, bdata);
+		take_forks(&bphil, bdata);
+		lets_eat(&bphil, bdata);
+		give_forks(bdata);
+		check_death(&bphil, bdata);
+		bphil.meals_amount++;
+		if (bphil.meals_amount == bdata->num && !(bphil.end_meals))
+		{
+			sem_wait(bphil.eat_full_sem);
+			bphil.end_meals = 1;
+		}
+		lets_sleep(&bphil, bdata);
+		check_death(&bphil, bdata);
+		b_print_status(&bphil, THINK, bdata);
 	}
-	return (NULL);
+	exit(1);
 }

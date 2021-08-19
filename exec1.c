@@ -12,15 +12,6 @@
 
 #include "philo.h"
 
-void	resting(unsigned int time)
-{
-	unsigned long	start;
-
-	start = getTime();
-	while (getTime() - start < (unsigned long)time)
-		usleep(100);
-}
-
 int	are_philos_full(t_philo *philo, t_data *data)
 {
 	if (philo->meals_amount == data->meals_n && !philo->end_meals)

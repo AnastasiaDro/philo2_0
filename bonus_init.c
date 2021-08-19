@@ -20,6 +20,15 @@ int	check_bdata(t_bdata *data, char *argv[])
 	return (0);
 }
 
+void 	init_sem(t_bdata *bdata)
+{
+	bdata->sem = sem_open(SEMAPHORE, O_CREAT, 0644, bdata->num);
+	bdata->die_sem = sem_open(DIED, O_CREAT, 0644, 1);
+	bdata->eat_full_sem = sem_open(IS_FULL, O_CREAT, 0644, bdata->num);
+	bdata->print_sem = sem_open(PRINT, O_CREAT, 0644, bdata->num);
+}
+
+
 void	init_bdata(t_bdata *data, char *argv[])
 {
 	data->num = ft_atoi(argv[1]);
@@ -36,12 +45,4 @@ void	init_bdata(t_bdata *data, char *argv[])
 		data->is_food_limited = 0;
 	if (check_bdata(data, argv))
 		exit(1);
-	sem_unlink(SEMAPHORE);
-	sem_unlink(DIED);
-	data->sem = sem_open(SEMAPHORE, O_CREAT, 0644, data->num);
-	data->die_sem = sem_open(DIED, O_CREAT, 0644, 1);
-	data->eat_full_sem = sem_open(IS_FULL, O_CREAT, 0644, data->num);
 }
-
-
-

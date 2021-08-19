@@ -8,6 +8,7 @@
 #define SEMAPHORE	"SEMA"
 #define DIED		"DIED"
 #define IS_FULL		"IS_FULL"
+#define PRINT		"PRINT"
 
 #include <semaphore.h>
 #include "philo.h"
@@ -26,6 +27,7 @@ typedef struct s_bdata
 	sem_t			*sem;
 	sem_t			*die_sem;
 	sem_t			*eat_full_sem;
+	sem_t			*print_sem;
 }				t_bdata;
 
 typedef struct s_bphilo
@@ -35,11 +37,15 @@ typedef struct s_bphilo
 	size_t			start;
 	unsigned int	meals_amount;
 	int				end_meals;
+	sem_t			*sem;
+	sem_t			*die_sem;
+	sem_t			*eat_full_sem;
 }				t_bphilo;
 
-int	check_bdata(t_bdata *data, char *argv[]);
+int		check_bdata(t_bdata *data, char *argv[]);
 void	init_bdata(t_bdata *data, char *argv[]);
-void init_sem(t_bdata *bdata);
-void init_die_sem(t_bdata *bdata);
-void be_alive(t_bdata *bdata, int i);
+void	be_alive(t_bdata *bdata, int i);
+void	b_print_status(t_bphilo *bphilo, char *status, t_bdata *bdata);
+void 	init_sem(t_bdata *bdata);
+void	start_philos(t_bdata *bdata);
 #endif

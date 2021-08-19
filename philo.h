@@ -77,6 +77,4 @@ void	free_all(t_data *data, t_philo *philos);
 
 int		ft_atoi(char *str);
 
-
-
 #endif
