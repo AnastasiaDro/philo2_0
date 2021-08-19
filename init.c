@@ -1,9 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/19 15:39:11 by cerebus           #+#    #+#             */
+/*   Updated: 2021/08/19 15:40:57 by cerebus          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "philo.h"
 
 int	check_data(t_data *data, char *argv[])
 {
-	if (data->num == -1 || data->die_time == -1 || data->eat_time == -1 || data->sleep_time == -1 || (argv[5] && data->meals_n == -1))
+	if (data->num == -1 || data->die_time == -1 || \
+		data->eat_time == -1 || data->sleep_time == -1 || \
+			(argv[5] && data->meals_n == -1))
 	{
 		printf("Invalid argument!\n");
 		return (1);
@@ -32,9 +45,9 @@ void	init_data(t_data *data, char *argv[])
 	create_pthreads_arr(data);
 }
 
-pthread_mutex_t *get_first(int i, t_data *data)
+pthread_mutex_t	*get_first(int i, t_data *data)
 {
-	pthread_mutex_t *first_fork;
+	pthread_mutex_t	*first_fork;
 
 	if (i == 0)
 		first_fork = data->forks[data->num - 1];
@@ -43,16 +56,16 @@ pthread_mutex_t *get_first(int i, t_data *data)
 	return (first_fork);
 }
 
-t_philo *init_philos(t_data *data)
+t_philo	*init_philos(t_data *data)
 {
 	int		i;
-	t_philo *philos;
+	t_philo	*philos;
 
-	i = 0;
+	i = -1;
 	philos = malloc(data->num * sizeof (t_philo));
 	if (!philos)
 		return (NULL);
-	while (i < data->num)
+	while (++i < data->num)
 	{
 		philos[i].index = i;
 		if ((i + 1) % 2)
@@ -68,7 +81,6 @@ t_philo *init_philos(t_data *data)
 		philos[i].data = data;
 		philos[i].meals_amount = 0;
 		philos[i].end_meals = 0;
-		i++;
 	}
 	return (philos);
 }

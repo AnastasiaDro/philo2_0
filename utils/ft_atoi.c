@@ -6,20 +6,9 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 15:52:07 by cerebus           #+#    #+#             */
-/*   Updated: 2021/04/27 02:28:21 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/19 15:36:48 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-static int	calc_coef(char c)
-{
-	int	coef;
-
-	if (c == '-')
-		coef = -1;
-	else
-		coef = 1;
-	return (coef);
-}
 
 long	ft_atoi(char *str)
 {
@@ -30,14 +19,11 @@ long	ft_atoi(char *str)
 	i = 0;
 	coef = 1;
 	result = 0;
-	while ((str[i] != '\0' && (str[i] >= '\t' && str[i] <= '\r')) || str[i] == ' ')
+	while ((str[i] != '\0' && (str[i] >= '\t' \
+			&& str[i] <= '\r')) || str[i] == ' ')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
-	{
 		return (-1);
-		coef = calc_coef(str[i]);
-		i++;
-	}
 	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
 	{
 		result *= 10;
