@@ -20,7 +20,6 @@ void	take_forks(t_bphilo *bphil, t_bdata *bdata)
 	b_print_status(bphil, TAKE_FORK, bdata);
 }
 
-
 void	give_forks(t_bdata *bdata)
 {
 	sem_post(bdata->sem);
@@ -29,8 +28,11 @@ void	give_forks(t_bdata *bdata)
 
 void	lets_eat(t_bphilo *bphil, t_bdata *bdata)
 {
+	size_t 	start;
+	size_t end;
+
 	b_print_status(bphil, EAT, bdata);
-	bphil->last_meal = getTime() - bphil->start;
+	//bphil->last_meal = getTime();
 	resting(bdata->eat_time);
 }
 
@@ -42,47 +44,53 @@ void	lets_sleep(t_bphilo *bphil, t_bdata *bdata)
 
 int		check_death(t_bphilo *bphil, t_bdata *bdata)
 {
-	int is;
+	size_t time;
+//	printf("%d last meal DEATH = %ld\n", bphil->index, bphil->last_meal);
+	time = getTime();
+	//printf("%d time DEATH = %ld\n", bphil->index, time);
 
-	is = EEXIST;
-	if (sem_open("DIED", O_EXCL) == &is)
-		exit(0);
-	if (getTime() - bphil->start - bphil->last_meal \
-		> (size_t) bdata->die_time)
-	{
-		sem_open("DIED", O_CREAT, 0644, 1);
+	if (getTime() - bphil->last_meal > (size_t) bdata->die_time)
 		b_print_status(bphil, DIED, bdata);
-		exit(0);
-	}
-//	if (are_philos_full(&phil[i], data))
-//		return (NULL);
+
 	return (0);
 }
 
 void	be_alive(t_bdata *bdata, int i)
 {
+	size_t 	start;
+	size_t end;
+
 	t_bphilo	bphil;
+	//pthread_t	death_eye;
 
 	bphil.start = getTime();
-	bphil.last_meal = 0;
+	bphil.last_meal = getTime();
 	bphil.index	= i;
 	bphil.end_meals = 0;
 	init_sem(bdata);
+
 	while (1)
 	{
-		check_death(&bphil, bdata);
+		if (getTime() - bphil.last_meal > bdata->die_time)
+		{
+			b_print_status(&bphil, DIED, bdata);
+			exit(0);
+		}
+
 		take_forks(&bphil, bdata);
 		lets_eat(&bphil, bdata);
 		give_forks(bdata);
-		check_death(&bphil, bdata);
-		bphil.meals_amount++;
-		if (bphil.meals_amount == bdata->num && !(bphil.end_meals))
+		if (getTime() - bphil.last_meal > bdata->die_time)
 		{
-			sem_wait(bphil.eat_full_sem);
-			bphil.end_meals = 1;
+			b_print_status(&bphil, DIED, bdata);
+			exit(0);
 		}
 		lets_sleep(&bphil, bdata);
-		check_death(&bphil, bdata);
+		if (getTime() - bphil.last_meal > bdata->die_time)
+		{
+			b_print_status(&bphil, DIED, bdata);
+			exit(0);
+		}
 		b_print_status(&bphil, THINK, bdata);
 	}
 	exit(1);

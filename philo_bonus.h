@@ -6,7 +6,6 @@
 #define PHILO_BONUS_H
 
 #define SEMAPHORE	"SEMA"
-#define DIED		"DIED"
 #define IS_FULL		"IS_FULL"
 #define PRINT		"PRINT"
 
@@ -15,7 +14,7 @@
 typedef struct s_bdata
 {
 	long int		num;
-	long int		die_time;
+	size_t 			die_time;
 	long int		eat_time;
 	long int		sleep_time;
 	long int		meals_n;
@@ -28,6 +27,7 @@ typedef struct s_bdata
 	sem_t			*die_sem;
 	sem_t			*eat_full_sem;
 	sem_t			*print_sem;
+	long int 		stat_time;
 }				t_bdata;
 
 typedef struct s_bphilo
