@@ -40,4 +40,5 @@ void	be_alive(t_bdata *bdata, int i);
 void	b_print_status(t_bphilo *bphilo, char *status, t_bdata *bdata);
 void 	init_sem(t_bdata *bdata);
 void	start_philos(t_bdata *bdata);
+int		bend(t_bdata *bdata);
 #endif

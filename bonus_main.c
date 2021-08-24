@@ -17,5 +17,6 @@ int	main(int argc, char *argv[])
 		kill(bdata.pids[i], SIGKILL);
 		i++;
 	}
+	bend(&bdata);
 	return (0);
 }

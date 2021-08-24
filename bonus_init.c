@@ -42,6 +42,8 @@ void	init_bdata(t_bdata *data, char *argv[])
 	else
 		data->is_food_limited = 0;
 	if (check_bdata(data, argv))
-		exit(1);
-	data->pids = malloc(sizeof (int) * (data->num ));
+		exit (1);
+	data->pids = malloc(sizeof (int) * (data->num));
+	if (!data->pids)
+		exit (1);
 }

@@ -32,4 +32,5 @@ void	start_philos(t_bdata *bdata)
 		if (bdata->pids[i] == 0)
 			be_alive(bdata, i);
 	}
+
 }
