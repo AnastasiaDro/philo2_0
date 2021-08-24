@@ -71,15 +71,9 @@ void	be_alive(t_bdata *bdata, int i)
 	while (1)
 	{
 		take_forks(&bphil, bdata);
-//		if (bdata->is_dead)
-//			exit(0);
 		lets_eat(&bphil, bdata);
 		give_forks(bdata);
-//		if (bdata->is_dead)
-//			exit(0);
 		lets_sleep(&bphil, bdata);
-//		if (bdata->is_dead)
-//			exit(0);
 		b_print_status(&bphil, THINK, bdata);
 	}
 }
