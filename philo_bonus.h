@@ -11,12 +11,13 @@
 
 #include <semaphore.h>
 #include "philo.h"
+#include <wait.h>
 typedef struct s_bdata
 {
 	long int		num;
 	size_t 			die_time;
-	long int		eat_time;
-	long int		sleep_time;
+	size_t 			eat_time;
+	size_t 		sleep_time;
 	long int		meals_n;
 	int				death_i;
 	char 			*sem_name;
@@ -28,6 +29,7 @@ typedef struct s_bdata
 	sem_t			*eat_full_sem;
 	sem_t			*print_sem;
 	long int 		stat_time;
+	int 			is_dead;
 }				t_bdata;
 
 typedef struct s_bphilo
@@ -40,6 +42,8 @@ typedef struct s_bphilo
 	sem_t			*sem;
 	sem_t			*die_sem;
 	sem_t			*eat_full_sem;
+	t_bdata 		*bdata;
+
 }				t_bphilo;
 
 int		check_bdata(t_bdata *data, char *argv[]);

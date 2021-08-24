@@ -1,16 +1,5 @@
-//
-// Created by Cesar Erebus on 8/19/21.
-//
-#include <sys/errno.h>
+
 #include "philo_bonus.h"
-
-
-//void	init_sem_inside(t_bphilo *phil, t_bdata *bdata)
-//{
-//	phil->sem = sem_open(SEMAPHORE, O_CREAT, 0644, bdata->num);
-//	phil->die_sem = sem_open(DIED, O_CREAT, 0644, 1);
-//	phil->eat_full_sem = sem_open(IS_FULL, O_CREAT, 0644, bdata->num);
-//}
 
 void	take_forks(t_bphilo *bphil, t_bdata *bdata)
 {
@@ -28,11 +17,9 @@ void	give_forks(t_bdata *bdata)
 
 void	lets_eat(t_bphilo *bphil, t_bdata *bdata)
 {
-	size_t 	start;
-	size_t end;
-
+	bphil->last_meal = getTime();
 	b_print_status(bphil, EAT, bdata);
-	//bphil->last_meal = getTime();
+	bphil->meals_amount++;
 	resting(bdata->eat_time);
 }
 
@@ -42,55 +29,55 @@ void	lets_sleep(t_bphilo *bphil, t_bdata *bdata)
 	resting(bdata->sleep_time);
 }
 
-int		check_death(t_bphilo *bphil, t_bdata *bdata)
+void	*check_death(void *bphilo)
 {
 	size_t time;
-//	printf("%d last meal DEATH = %ld\n", bphil->index, bphil->last_meal);
-	time = getTime();
-	//printf("%d time DEATH = %ld\n", bphil->index, time);
-
-	if (getTime() - bphil->last_meal > (size_t) bdata->die_time)
-		b_print_status(bphil, DIED, bdata);
-
-	return (0);
+	t_bphilo *bphil = (t_bphilo *)bphilo;
+	t_bdata *bdata = bphil->bdata;
+	while(1)
+	{
+		time = getTime() - bphil->last_meal;
+		if ((int) time < 0)
+			time = time * (-1);
+		if (time > bdata->die_time)
+		{
+			b_print_status(bphil, DIED, bdata);
+			bdata->is_dead = 1;
+			return NULL;
+		}
+		if (bdata->is_food_limited && bphil->meals_amount == bdata->meals_n)
+		{
+			bdata->is_dead = 1;
+			return NULL;
+		}
+	}
 }
 
 void	be_alive(t_bdata *bdata, int i)
 {
-	size_t 	start;
-	size_t end;
-
 	t_bphilo	bphil;
-	//pthread_t	death_eye;
 
 	bphil.start = getTime();
 	bphil.last_meal = getTime();
-	bphil.index	= i;
+	bphil.index = i;
 	bphil.end_meals = 0;
+	bphil.bdata = bdata;
 	init_sem(bdata);
 
+	pthread_t *death_checker;
+	pthread_create(&death_checker, NULL, &check_death, (void *)(&bphil));
 	while (1)
 	{
-		if (getTime() - bphil.last_meal > bdata->die_time)
-		{
-			b_print_status(&bphil, DIED, bdata);
-			exit(0);
-		}
-
 		take_forks(&bphil, bdata);
+		if (bdata->is_dead)
+			exit(0);
 		lets_eat(&bphil, bdata);
 		give_forks(bdata);
-		if (getTime() - bphil.last_meal > bdata->die_time)
-		{
-			b_print_status(&bphil, DIED, bdata);
+		if (bdata->is_dead)
 			exit(0);
-		}
 		lets_sleep(&bphil, bdata);
-		if (getTime() - bphil.last_meal > bdata->die_time)
-		{
-			b_print_status(&bphil, DIED, bdata);
+		if (bdata->is_dead)
 			exit(0);
-		}
 		b_print_status(&bphil, THINK, bdata);
 	}
 	exit(1);

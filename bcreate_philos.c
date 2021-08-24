@@ -15,7 +15,6 @@ void	start_philos(t_bdata *bdata)
 	sem_unlink(DIED);
 	sem_unlink(IS_FULL);
 	sem_unlink(PRINT);
-	bdata->stat_time = getTime();
 	while (i < bdata->num)
 	{
 		pid = fork();
