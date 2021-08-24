@@ -2,11 +2,11 @@
 // Created by Cesar Erebus on 8/19/21.
 //
 
+#include <signal.h>
 #include "philo_bonus.h"
 void	start_philos(t_bdata *bdata)
 {
 	int i;
-	int pid;
 	int flag;
 
 	i = 0;
@@ -17,8 +17,8 @@ void	start_philos(t_bdata *bdata)
 	sem_unlink(PRINT);
 	while (i < bdata->num)
 	{
-		pid = fork();
-		if (pid > 0)
+		bdata->pids[i] = fork();
+		if (bdata->pids[i] > 0)
 		{
 			i++;
 			if (flag == 0)
@@ -26,9 +26,10 @@ void	start_philos(t_bdata *bdata)
 				init_sem(bdata);
 				flag = 1;
 			}
+			usleep(50);
+			continue;
 		}
-		usleep(50);
-		if (pid == 0)
+		if (bdata->pids[i] == 0)
 			be_alive(bdata, i);
 	}
 }

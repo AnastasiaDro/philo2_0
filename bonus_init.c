@@ -23,8 +23,6 @@ int	check_bdata(t_bdata *data, char *argv[])
 void 	init_sem(t_bdata *bdata)
 {
 	bdata->sem = sem_open(SEMAPHORE, O_CREAT, 0644, bdata->num);
-	bdata->die_sem = sem_open(DIED, O_CREAT, 0644, 1);
-	bdata->eat_full_sem = sem_open(IS_FULL, O_CREAT, 0644, bdata->num);
 	bdata->print_sem = sem_open(PRINT, O_CREAT, 0644, bdata->num);
 }
 
@@ -40,10 +38,10 @@ void	init_bdata(t_bdata *data, char *argv[])
 	{
 		data->meals_n = ft_atoi(argv[5]);
 		data->is_food_limited = 1;
-		data->is_ready = 0;
 	}
 	else
 		data->is_food_limited = 0;
 	if (check_bdata(data, argv))
 		exit(1);
+	data->pids = malloc(sizeof (int) * (data->num ));
 }

@@ -1,4 +1,5 @@
 
+#include <signal.h>
 #include "philo_bonus.h"
 
 void	take_forks(t_bphilo *bphil, t_bdata *bdata)
@@ -41,13 +42,14 @@ void	*check_death(void *bphilo)
 			time = time * (-1);
 		if (time > bdata->die_time)
 		{
-			b_print_status(bphil, DIED, bdata);
-			bdata->is_dead = 1;
-			return NULL;
+			sem_wait(bdata->print_sem);
+			printf("%lu %d %s\n", getTime() - bphil->start, bphil->index + 1, DIED);
+			exit(0);
 		}
 		if (bdata->is_food_limited && bphil->meals_amount == bdata->meals_n)
 		{
 			bdata->is_dead = 1;
+			sem_wait(bdata->print_sem);
 			return NULL;
 		}
 	}
@@ -60,25 +62,24 @@ void	be_alive(t_bdata *bdata, int i)
 	bphil.start = getTime();
 	bphil.last_meal = getTime();
 	bphil.index = i;
-	bphil.end_meals = 0;
 	bphil.bdata = bdata;
 	init_sem(bdata);
 
-	pthread_t *death_checker;
+	pthread_t death_checker;
 	pthread_create(&death_checker, NULL, &check_death, (void *)(&bphil));
+	pthread_detach(death_checker);
 	while (1)
 	{
 		take_forks(&bphil, bdata);
-		if (bdata->is_dead)
-			exit(0);
+//		if (bdata->is_dead)
+//			exit(0);
 		lets_eat(&bphil, bdata);
 		give_forks(bdata);
-		if (bdata->is_dead)
-			exit(0);
+//		if (bdata->is_dead)
+//			exit(0);
 		lets_sleep(&bphil, bdata);
-		if (bdata->is_dead)
-			exit(0);
+//		if (bdata->is_dead)
+//			exit(0);
 		b_print_status(&bphil, THINK, bdata);
 	}
-	exit(1);
 }
