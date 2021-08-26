@@ -15,8 +15,8 @@ typedef struct s_bdata
 	int 			*pids;
 	size_t 			die_time;
 	size_t 			eat_time;
-	size_t 		sleep_time;
-	long int		meals_n;
+	size_t 			sleep_time;
+	size_t			meals_n;
 	int				is_food_limited;
 	sem_t			*sem;
 	sem_t			*print_sem;

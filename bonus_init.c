@@ -10,9 +10,12 @@
 
 int	check_bdata(t_bdata *data, char *argv[])
 {
-	if (data->num == -1 || data->die_time == -1 || \
-	data->eat_time == -1 || data->sleep_time == -1 || \
-	(argv[5] && data->meals_n == -1))
+	size_t	a;
+
+	a = -1;
+	if (data->num == a || data->die_time == a || \
+	data->eat_time == a || data->sleep_time == a || \
+	(argv[5] && data->meals_n == a))
 	{
 		printf("Invalid argument!\n");
 		return (1);

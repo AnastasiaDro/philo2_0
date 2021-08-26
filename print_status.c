@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../philo.h"
+#include "philo.h"
 
 void	print_status(t_philo *philo, char *status, t_data *data)
 {	

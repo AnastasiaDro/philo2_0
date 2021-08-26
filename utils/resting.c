@@ -1,4 +1,6 @@
 
+#include "../philo.h"
+
 void	resting(unsigned int time)
 {
 	unsigned long	start;
