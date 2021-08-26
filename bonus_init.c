@@ -1,10 +1,15 @@
-//
-// Created by Cesar Erebus on 8/19/21.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bonus_init.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/26 18:02:12 by cerebus           #+#    #+#             */
+/*   Updated: 2021/08/26 18:12:51 by cerebus          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//
-// Created by Cesar Erebus on 8/19/21.
-//
 #include "philo_bonus.h"
 #include "philo.h"
 
@@ -13,7 +18,7 @@ int	check_bdata(t_bdata *data, char *argv[])
 	size_t	a;
 
 	a = -1;
-	if (data->num == a || data->die_time == a || \
+	if (data->num == (long int) a || data->die_time == a || \
 	data->eat_time == a || data->sleep_time == a || \
 	(argv[5] && data->meals_n == a))
 	{
@@ -23,12 +28,11 @@ int	check_bdata(t_bdata *data, char *argv[])
 	return (0);
 }
 
-void 	init_sem(t_bdata *bdata)
+void	init_sem(t_bdata *bdata)
 {
 	bdata->sem = sem_open(SEMAPHORE, O_CREAT, 0644, bdata->num);
 	bdata->print_sem = sem_open(PRINT, O_CREAT, 0644, bdata->num);
 }
-
 
 void	init_bdata(t_bdata *data, char *argv[])
 {

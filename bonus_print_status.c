@@ -1,6 +1,15 @@
-//
-// Created by Cesar Erebus on 8/19/21.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bonus_print_status.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/26 18:12:25 by cerebus           #+#    #+#             */
+/*   Updated: 2021/08/26 18:12:27 by cerebus          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo_bonus.h"
 
 void	b_print_status(t_bphilo *bphilo, char *status, t_bdata *bdata)
