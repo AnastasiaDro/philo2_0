@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:11:34 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/29 14:55:42 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/29 15:06:19 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,21 @@ int	main(int argc, char *argv[])
 	start_philos(&bdata);
 	if (!argv[5])
 	{
-		waitpid(-1, 0, 0);
+		waitpid(-1, status, 0);
 		kill_processes(&bdata);
 	}
 	else
 	{
-		while (waitpid(-1, 0, 0) != -1)
-			waitpid(-1, 0, 0);
+		while (waitpid(-1, status, 0) != -1)
+		{
+			if (*status)
+			{
+				kill_processes(&bdata);
+				break;
+			}
+		}
 	}
+	free(status);
 	bend(&bdata);
 	return (0);
 }
