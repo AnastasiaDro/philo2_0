@@ -31,13 +31,13 @@ void	*check_death(void *bphilo)
 		{
 			sem_wait(bdata->print_sem);
 			printf("%lu %d %s\n", getTime() - bphil->start, bphil->index + 1, DIED);
-			bdata->is_dead = 1;
+		//	bdata->is_full = 1;
 			free(bdata->pids);
 			exit (0);
 		}
 		if (bdata->is_food_limited && bphil->meals_amount == bdata->meals_n)
 		{
-			bdata->is_dead = 1;
+			bdata->is_full = 1;
 			return (0);
 		}
 	}
@@ -56,7 +56,7 @@ void	be_alive(t_bdata *bdata, int i)
 	bphil->meals_amount = 0;
 	pthread_create(&death_checker, NULL, &check_death, (void *)(bphil));
 	pthread_detach(death_checker);
-	while (!bdata->is_dead)
+	while (!bdata->is_full)
 	{
 		take_forks(bphil, bdata);
 		lets_eat(bphil, bdata);

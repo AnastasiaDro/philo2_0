@@ -41,7 +41,7 @@ void	init_bdata(t_bdata *data, char *argv[])
 	data->die_time = ft_atoi(argv[2]);
 	data->eat_time = ft_atoi(argv[3]);
 	data->sleep_time = ft_atoi(argv[4]);
-	data->is_dead = 0;
+	data->is_full = 0;
 	if (argv[5])
 	{
 		data->meals_n = ft_atoi(argv[5]);

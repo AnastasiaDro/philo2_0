@@ -29,7 +29,7 @@ typedef struct s_bdata
 	int				is_food_limited;
 	sem_t			*sem;
 	sem_t			*print_sem;
-	int				is_dead;
+	int				is_full;
 
 }				t_bdata;
 
