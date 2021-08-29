@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:02:34 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/26 22:04:21 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/29 14:55:19 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,6 @@ void	start_philos(t_bdata *bdata)
 
 	i = -1;
 	flag = 0;
-	// sem_unlink(SEMAPHORE);
-	// sem_unlink(PRINT);
-	// init_sem(bdata);
 	while (++i < bdata->num)
 	{
 		bdata->pids[i] = fork();

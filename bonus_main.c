@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:11:34 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/26 22:11:50 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/29 14:55:42 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int argc, char *argv[])
 	}
 	else
 	{
-		while(waitpid(-1, 0, 0) != -1)
+		while (waitpid(-1, 0, 0) != -1)
 			waitpid(-1, 0, 0);
 	}
 	bend(&bdata);

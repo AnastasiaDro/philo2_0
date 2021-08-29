@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:02:29 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/26 22:09:26 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/29 14:56:57 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	*check_death(void *bphilo)
 
 	bphil = (t_bphilo *)bphilo;
 	bdata = bphil->bdata;
-
 	while (1)
 	{
 		time = getTime() - bphil->last_meal;
@@ -30,8 +29,8 @@ void	*check_death(void *bphilo)
 		if (time > bdata->die_time)
 		{
 			sem_wait(bdata->print_sem);
-			printf("%lu %d %s\n", getTime() - bphil->start, bphil->index + 1, DIED);
-		//	bdata->is_full = 1;
+			printf("%lu %d %s\n", getTime() - bphil->start, \
+				bphil->index + 1, DIED);
 			free(bdata->pids);
 			exit (0);
 		}
