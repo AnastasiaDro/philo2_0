@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:02:12 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/26 18:12:51 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/26 19:22:50 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ int	check_bdata(t_bdata *data, char *argv[])
 
 void	init_sem(t_bdata *bdata)
 {
+	
 	bdata->sem = sem_open(SEMAPHORE, O_CREAT, 0644, bdata->num);
-	bdata->print_sem = sem_open(PRINT, O_CREAT, 0644, bdata->num);
+	bdata->print_sem = sem_open(PRINT, O_CREAT, 0644, 1);
 }
 
 void	init_bdata(t_bdata *data, char *argv[])
@@ -47,7 +48,11 @@ void	init_bdata(t_bdata *data, char *argv[])
 		data->is_food_limited = 1;
 	}
 	else
+	{
 		data->is_food_limited = 0;
+		data->meals_n = 1;
+	}
+		
 	if (check_bdata(data, argv))
 		exit (1);
 	data->pids = malloc(sizeof (int) * (data->num));
