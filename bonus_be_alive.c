@@ -32,6 +32,7 @@ void	*check_death(void *bphilo)
 			sem_wait(bdata->print_sem);
 			printf("%lu %d %s\n", getTime() - bphil->start, bphil->index + 1, DIED);
 			bdata->is_dead = 1;
+			free(bdata->pids);
 			exit (0);
 		}
 		if (bdata->is_food_limited && bphil->meals_amount == bdata->meals_n)

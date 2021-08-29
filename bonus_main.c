@@ -42,21 +42,12 @@ int	main(int argc, char *argv[])
 	if (!argv[5])
 	{
 		waitpid(-1, 0, 0);
-		sem_wait((&bdata)->print_sem);
 		kill_processes(&bdata);
-		sem_post((&bdata)->print_sem);
 	}
 	else
 	{
-		while(waitpid(-1, status, 0) != -1)
-		{
-			if (WIFSIGNALED(status))
-			{
-				sem_wait((&bdata)->print_sem);
-				kill_processes(&bdata);
-				unlink(PRINT);
-			}
-		}
+		while(waitpid(-1, 0, 0) != -1)
+			waitpid(-1, 0, 0);
 	}
 	bend(&bdata);
 	return (0);

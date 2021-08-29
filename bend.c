@@ -15,6 +15,8 @@
 int	bend(t_bdata *bdata)
 {
 	free(bdata->pids);
+	sem_close(SEMAPHORE);
+	sem_close(PRINT);
 	sem_unlink(SEMAPHORE);
 	sem_unlink(PRINT);
 	return (0);
