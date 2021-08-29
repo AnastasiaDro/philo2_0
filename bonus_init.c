@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:02:12 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/29 14:56:11 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/29 15:15:56 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	check_bdata(t_bdata *data, char *argv[])
 
 void	init_sem(t_bdata *bdata)
 {
+	sem_unlink(SEMAPHORE);
+	sem_unlink(PRINT);
 	bdata->sem = sem_open(SEMAPHORE, O_CREAT, 0644, bdata->num);
 	bdata->print_sem = sem_open(PRINT, O_CREAT, 0644, 1);
 }
@@ -56,4 +58,5 @@ void	init_bdata(t_bdata *data, char *argv[])
 	data->pids = malloc(sizeof (int) * (data->num));
 	if (!data->pids)
 		exit (1);
+	init_sem(data);
 }

@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:09:20 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/26 18:16:32 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/29 15:12:58 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	be_alive(t_bdata *bdata, int i);
 void	b_print_status(t_bphilo *bphilo, char *status, t_bdata *bdata);
 void	init_sem(t_bdata *bdata);
 void	start_philos(t_bdata *bdata);
-int		bend(t_bdata *bdata);
+int		bend(t_bdata *bdata, int *status);
 void	take_forks(t_bphilo *bphil, t_bdata *bdata);
 void	give_forks(t_bdata *bdata);
 void	lets_eat(t_bphilo *bphil, t_bdata *bdata);

@@ -6,7 +6,7 @@
 /*   By: cerebus <cerebus@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/26 18:11:34 by cerebus           #+#    #+#             */
-/*   Updated: 2021/08/29 15:06:19 by cerebus          ###   ########.fr       */
+/*   Updated: 2021/08/29 15:16:05 by cerebus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,11 @@ void	kill_processes(t_bdata *bdata)
 int	main(int argc, char *argv[])
 {
 	t_bdata	bdata;
-	int		i;
 	int		*status;
 
-	i = 0;
 	status = malloc(sizeof(int));
 	check_args(argc);
 	init_bdata(&bdata, argv);
-	sem_unlink(SEMAPHORE);
-	sem_unlink(PRINT);
-	init_sem(&bdata);
 	start_philos(&bdata);
 	if (!argv[5])
 	{
@@ -51,11 +46,10 @@ int	main(int argc, char *argv[])
 			if (*status)
 			{
 				kill_processes(&bdata);
-				break;
+				break ;
 			}
 		}
 	}
-	free(status);
-	bend(&bdata);
+	bend(&bdata, status);
 	return (0);
 }
