@@ -16,7 +16,7 @@
 # define IS_FULL		"IS_FULL"
 # define PRINT		"PRINT"
 # include <semaphore.h>
-# include "philo.h"
+# include "../philo/philo.h"
 
 typedef struct s_bdata
 {
